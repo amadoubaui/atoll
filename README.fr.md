@@ -9,7 +9,7 @@
 Tes applications web deviennent de vraies fenêtres, avec un bureau, un Dock, des dossiers, des espaces, Mission Control et un raccourci clavier pour tout.<br>
 Moteur Chromium. Libre et gratuit.
 
-[**Télécharger pour macOS**](https://github.com/amadoubaui/atoll/releases/latest) · [Windows](https://github.com/amadoubaui/atoll/releases/latest) · [Site](https://atoll.pixework.pro) · [English](README.md)
+[**Télécharger pour Mac (Apple Silicon)**](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-mac-apple-silicon.zip) · [Mac Intel](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-mac-intel.zip) · [Windows](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-windows-x64.zip) · [Site](https://atoll.pixework.pro) · [English](README.md)
 
 <img src="docs/media/demo.gif" width="800" alt="Atoll en action">
 
@@ -39,9 +39,9 @@ On vit dans le navigateur : Gmail, Figma, Notion, WhatsApp, YouTube, Claude, Cha
 
 ## Installer
 
-**macOS** : télécharge `Atoll-mac.zip` dans la [dernière version](https://github.com/amadoubaui/atoll/releases/latest), décompresse, glisse **Atoll** dans *Applications*. La première fois : clic droit sur Atoll → **Ouvrir** → **Ouvrir** (l'application n'est pas encore notariée par Apple).
+**macOS** : télécharge [`Atoll-mac-apple-silicon.zip`](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-mac-apple-silicon.zip) (M1, M2, M3, M4…) ou [`Atoll-mac-intel.zip`](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-mac-intel.zip), décompresse, glisse **Atoll** dans *Applications*. La première fois : clic droit sur Atoll → **Ouvrir** → **Ouvrir** (l'application n'est pas encore notariée par Apple).
 
-**Windows** 10 ou 11 : télécharge `Atoll-windows-x64.zip`, décompresse, lance `Atoll.exe`.
+**Windows** 10 ou 11 : télécharge [`Atoll-windows-x64.zip`](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-windows-x64.zip), décompresse, lance `Atoll.exe`.
 
 ## Développer
 

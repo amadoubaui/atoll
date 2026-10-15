@@ -9,7 +9,7 @@
 Your web apps become real windows — with a desktop, a Dock, folders, spaces, Mission Control and a keyboard shortcut for everything.<br>
 Built on Chromium. Free and open source.
 
-[**Download for macOS**](https://github.com/amadoubaui/atoll/releases/latest) · [Windows](https://github.com/amadoubaui/atoll/releases/latest) · [Website](https://atoll.pixework.pro) · [Version française](README.fr.md)
+[**Download for Mac (Apple Silicon)**](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-mac-apple-silicon.zip) · [Mac Intel](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-mac-intel.zip) · [Windows](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-windows-x64.zip) · [Website](https://atoll.pixework.pro) · [Version française](README.fr.md)
 
 <img src="docs/media/demo.gif" width="800" alt="Atoll in action: windows, Launchpad, full space, Dock, Mission Control">
 
@@ -77,10 +77,10 @@ On Windows, <kbd>⌘</kbd> is <kbd>Ctrl</kbd>.
 
 ## Install
 
-**macOS** (Apple Silicon and Intel): download `Atoll-mac.zip` from the [latest release](https://github.com/amadoubaui/atoll/releases/latest), unzip, drag **Atoll** into *Applications*.
+**macOS**: download [`Atoll-mac-apple-silicon.zip`](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-mac-apple-silicon.zip) (M1, M2, M3, M4…) or [`Atoll-mac-intel.zip`](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-mac-intel.zip), unzip, drag **Atoll** into *Applications*.
 Atoll isn't notarized by Apple yet (that costs money), so the first time: right-click Atoll → **Open** → **Open**. Or in Terminal: `xattr -cr /Applications/Atoll.app`.
 
-**Windows** 10/11: download `Atoll-windows-x64.zip`, unzip, run `Atoll.exe`. If SmartScreen appears: *More info* → *Run anyway*.
+**Windows** 10/11: download [`Atoll-windows-x64.zip`](https://github.com/amadoubaui/atoll/releases/latest/download/Atoll-windows-x64.zip), unzip, run `Atoll.exe`. If SmartScreen appears: *More info* → *Run anyway*.
 
 ## Under the hood
 

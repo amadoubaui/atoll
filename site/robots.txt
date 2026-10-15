@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://atoll.pixework.pro/sitemap.xml
