@@ -24,7 +24,7 @@ function npm(args, cwd) {
 }
 
 function ensure() {
-  if (installed() !== version) {
+  if (installed() !== version || !fs.existsSync(path.join(runtime, 'node_modules', 'playwright-core', 'package.json'))) {
     console.log(`Installation d'Electron ${version} dans ${runtime}…`);
     fs.mkdirSync(runtime, { recursive: true });
     const manifest = path.join(runtime, 'package.json');

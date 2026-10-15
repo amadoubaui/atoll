@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const dev = require('./dev');
+dev.ensure(); // moteur et outil d'essai, installés au premier lancement
 const { _electron } = require(path.join(dev.runtime, 'node_modules', 'playwright-core'));
 
 (async () => {

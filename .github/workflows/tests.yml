@@ -16,8 +16,8 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
 
@@ -39,7 +39,7 @@ jobs:
         shell: bash
         run: echo "ATOLL_VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: runner.os == 'Windows'
         with:
           name: Atoll-${{ env.ATOLL_VERSION }}-windows-x64

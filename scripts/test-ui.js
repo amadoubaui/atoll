@@ -10,6 +10,7 @@ const http = require('http');
 const os = require('os');
 const path = require('path');
 const dev = require('./dev');
+dev.ensure(); // moteur et outil d'essai, installés au premier lancement
 const { _electron } = require(path.join(dev.runtime, 'node_modules', 'playwright-core'));
 
 const shots = process.env.ATOLL_SHOTS;
