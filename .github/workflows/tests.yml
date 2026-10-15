@@ -1,5 +1,5 @@
-# Essais d'Atoll sur macOS et Windows à chaque envoi.
-# Sous Windows, l'application est aussi fabriquée et publiée comme pièce jointe.
+# Essais d'Atoll sur macOS, Windows et Linux à chaque envoi.
+# Sous Windows et Linux, l'application est aussi fabriquée et publiée comme pièce jointe.
 name: Tests
 
 on:
@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-latest, windows-latest, ubuntu-latest]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -27,9 +27,15 @@ jobs:
         shell: pwsh
         run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
 
+      # Ubuntu 24.04 interdit par défaut les espaces de noms dont le bac à sable de Chromium a besoin.
+      - name: Bac à sable de Chromium (Linux)
+        if: runner.os == 'Linux'
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
       # L'écran des machines macOS de GitHub fait 1024 × 768 : la fenêtre d'essai doit y tenir.
+      # Sous Linux, pas d'écran : xvfb-run en fournit un.
       - name: Essais de bout en bout
-        run: node scripts/test-ui.js
+        run: ${{ runner.os == 'Linux' && 'xvfb-run -a -s "-screen 0 1920x1080x24" ' || '' }}node scripts/test-ui.js
         env:
           ATOLL_TEST_SIZE: ${{ runner.os == 'macOS' && '1000x680' || '1440x900' }}
 
@@ -37,8 +43,12 @@ jobs:
         if: runner.os == 'Windows'
         run: node scripts/build-win.js --icon
 
+      - name: Fabrication (Linux)
+        if: runner.os == 'Linux'
+        run: node scripts/build-linux.js
+
       - name: Version
-        if: runner.os == 'Windows'
+        if: runner.os != 'macOS'
         shell: bash
         run: echo "ATOLL_VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
 
@@ -47,3 +57,9 @@ jobs:
         with:
           name: Atoll-${{ env.ATOLL_VERSION }}-windows-x64
           path: ~/.atoll-dev/dist/Atoll-*-windows-*.zip
+
+      - uses: actions/upload-artifact@v5
+        if: runner.os == 'Linux'
+        with:
+          name: Atoll-${{ env.ATOLL_VERSION }}-linux-x64
+          path: ~/.atoll-dev/dist/Atoll-*-linux-*.tar.gz
