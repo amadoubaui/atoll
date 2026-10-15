@@ -27,8 +27,11 @@ jobs:
         shell: pwsh
         run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
 
+      # L'écran des machines macOS de GitHub fait 1024 × 768 : la fenêtre d'essai doit y tenir.
       - name: Essais de bout en bout
         run: node scripts/test-ui.js
+        env:
+          ATOLL_TEST_SIZE: ${{ runner.os == 'macOS' && '1000x680' || '1440x900' }}
 
       - name: Fabrication (Windows)
         if: runner.os == 'Windows'

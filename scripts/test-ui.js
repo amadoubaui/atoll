@@ -40,7 +40,8 @@ async function launch(userData) {
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource|ERR_/.test(m.text())) errors.push(m.text()); });
-  await app.evaluate(({ BrowserWindow }) => { const w = BrowserWindow.getAllWindows()[0]; w.setContentSize(1440, 900); w.center(); });
+  const [SW, SH] = (process.env.ATOLL_TEST_SIZE || '1440x900').split('x').map(Number);
+  await app.evaluate(({ BrowserWindow }, [w0, h0]) => { const w = BrowserWindow.getAllWindows()[0]; w.setContentSize(w0, h0); w.center(); }, [SW, SH]);
   await page.waitForSelector('body[data-ready="1"]', { timeout: 20000 });
   await page.waitForTimeout(300);
   return { app, page, errors };
@@ -138,7 +139,7 @@ const focused = (page) => page.evaluate(() => window.__atoll.wm.focused()?.appId
     await press(app, `${MOD}+Shift+f`);
     await until(page, () => window.__atoll.wm.focused()?.mode === 'space');
     await page.evaluate(() => { window.__atoll.edges.nativeFullscreen = true; });
-    const H = 900;
+    const H = await page.evaluate(() => innerHeight);
     await pointer(app, 700, 400);
     await until(page, () => !document.querySelector('#dock').classList.contains('shown'));
     await pointer(app, 700, H - 40);
@@ -160,25 +161,27 @@ const focused = (page) => page.evaluate(() => window.__atoll.wm.focused()?.appId
   await step('aimantation : moitié gauche au clavier, puis glisser contre le bord droit', async () => {
     await press(app, `${SNAP}+ArrowLeft`);
     await until(page, () => window.__atoll.wm.focused()?.mode === 'left');
+    const half = await page.evaluate(() => Math.round(innerWidth / 2));
+    const right = await page.evaluate(() => innerWidth - 1);
     let w = (await wins(page))[0];
     assert.strictEqual(w.x, 0);
-    assert.strictEqual(w.w, 720);
+    assert.strictEqual(w.w, half);
     // Glisser la barre de titre jusqu'au bord droit.
     const bar = await page.locator('.window.focused .win-titlebar').boundingBox();
     await page.mouse.move(bar.x + bar.width / 2 + 60, bar.y + 20);
     await page.mouse.down();
-    await page.mouse.move(1000, 300, { steps: 6 });
-    await page.mouse.move(1439, 400, { steps: 6 });
+    await page.mouse.move(right - 200, 300, { steps: 6 });
+    await page.mouse.move(right, 400, { steps: 6 });
     await page.mouse.up();
     await until(page, () => window.__atoll.wm.focused()?.mode === 'right');
     w = (await wins(page))[0];
-    assert.strictEqual(w.x, 720);
+    assert.strictEqual(w.x, half);
   });
 
   await step('⌘M réduit dans le Dock, un clic sur l’icône la ramène', async () => {
     await press(app, `${MOD}+m`);
     await until(page, () => window.__atoll.wm.allWindows()[0].minimized);
-    await page.mouse.move(700, 880);
+    await page.mouse.move(400, (await page.evaluate(() => innerHeight)) - 20);
     await page.click(`#dock .dock-item[data-app="${webId}"]`);
     await until(page, () => !window.__atoll.wm.allWindows()[0].minimized && window.__atoll.wm.focused());
   });
