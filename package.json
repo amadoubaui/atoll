@@ -13,7 +13,8 @@
     "start": "node scripts/dev.js",
     "test": "node scripts/test-ui.js",
     "build": "node scripts/build-mac.js",
-    "build:win": "node scripts/build-win.js"
+    "build:win": "node scripts/build-win.js",
+    "build:linux": "node scripts/build-linux.js"
   },
   "atoll": {
     "electron": "44.7.0"

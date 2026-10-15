@@ -1,0 +1,52 @@
+Atoll {version} pour Linux
+========================
+
+Atoll est le navigateur qui démarre comme un système : tes sites deviennent
+des applications, avec un bureau, un Dock, des dossiers et des espaces.
+Logiciel libre (licence MIT). Code source : https://github.com/amadoubaui/atoll
+
+
+Lancer Atoll
+------------
+
+1. Décompresse l'archive, par exemple dans ~/.local/opt :
+
+     mkdir -p ~/.local/opt
+     tar -xzf Atoll-{version}-linux-x64.tar.gz -C ~/.local/opt
+
+   Garde tous les fichiers du dossier « Atoll » ensemble : le programme
+   atoll a besoin de ses voisins.
+2. Lance ~/.local/opt/Atoll/atoll
+
+Il n'y a pas d'installateur : rien n'est copié ailleurs sur l'ordinateur.
+Linux en 64 bits (x86_64), avec X11 ou Wayland.
+
+
+« The SUID sandbox helper binary was found, but is not configured correctly »
+-----------------------------------------------------------------------------
+
+Sur Ubuntu 24.04 et d'autres systèmes récents, Chromium a besoin que son
+programme d'isolation appartienne à root. Une seule fois :
+
+     sudo chown root:root ~/.local/opt/Atoll/chrome-sandbox
+     sudo chmod 4755 ~/.local/opt/Atoll/chrome-sandbox
+
+
+Dans le menu des applications
+-----------------------------
+
+     mkdir -p ~/.local/share/applications
+     sed -e "s|^Exec=atoll|Exec=$HOME/.local/opt/Atoll/atoll|" \
+         -e "s|^Icon=atoll|Icon=$HOME/.local/opt/Atoll/atoll.png|" \
+         ~/.local/opt/Atoll/atoll.desktop > ~/.local/share/applications/atoll.desktop
+
+
+Où sont tes données
+-------------------
+
+Bureau, Dock, notes, réglages et connexions aux sites sont rangés dans
+~/.config/Atoll
+Mettre Atoll à jour : remplace le dossier « Atoll » par celui de la nouvelle
+archive, tes données restent en place (refais l'étape chrome-sandbox).
+Désinstaller : supprime ~/.local/opt/Atoll, ~/.config/Atoll et
+~/.local/share/applications/atoll.desktop.
