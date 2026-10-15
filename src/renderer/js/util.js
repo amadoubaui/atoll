@@ -51,6 +51,7 @@ export const bus = {
 };
 
 export const reducedMotion = () => document.documentElement.classList.contains('reduce-motion')
+  || document.documentElement.classList.contains('test-mode')
   || matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Lance une animation Web et attend sa fin (immédiat si les animations sont réduites).

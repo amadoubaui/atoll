@@ -129,7 +129,7 @@ const focused = (page) => page.evaluate(() => window.__atoll.wm.focused()?.appId
     assert.ok(await page.evaluate(() => document.body.classList.contains('in-app-space')));
     await page.waitForTimeout(500);
     const r = await page.evaluate(() => { const b = window.__atoll.wm.focused().webview.getBoundingClientRect(); return [b.left, b.top, b.width, b.height, innerWidth, innerHeight]; });
-    assert.deepStrictEqual(r.slice(0, 4), [0, 0, r[4], r[5]], 'la page remplit tout l’écran, sans bordure');
+    assert.deepStrictEqual(r.slice(0, 4), [0, 0, r[4], r[5]], 'la page doit remplir tout l’écran : ' + JSON.stringify(r));
     await shot(page, '03-plein-espace');
     await press(app, `${MOD}+Shift+f`);
     await until(page, () => window.__atoll.wm.focused()?.mode === 'normal' && !document.body.classList.contains('in-app-space'));
@@ -141,7 +141,9 @@ const focused = (page) => page.evaluate(() => window.__atoll.wm.focused()?.appId
     await page.evaluate(() => { window.__atoll.edges.nativeFullscreen = true; });
     const H = await page.evaluate(() => innerHeight);
     await pointer(app, 700, 400);
-    await until(page, () => !document.querySelector('#dock').classList.contains('shown'));
+    await until(page, () => !document.querySelector('#dock').classList.contains('shown')).catch(async (e) => {
+      throw new Error('Dock encore affiché : ' + JSON.stringify(await page.evaluate(() => ({ space: window.__atoll.wm.currentSpace().kind, edges: window.__atoll.edges, body: document.body.className }))));
+    });
     await pointer(app, 700, H - 40);
     await until(page, () => document.querySelector('#dock').classList.contains('shown'));
     await shot(page, '04-dock-revele');
