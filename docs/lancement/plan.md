@@ -175,6 +175,13 @@ Une liste « awesome » est un dépôt GitHub qui recense les meilleurs outils d
 4. *Commit changes* → *Propose changes* → *Create pull request*. Titre : `Add Atoll`. Dans le texte, une phrase sur ce qu'est Atoll et la confirmation que tu as lu les règles.
 5. Attendre. Certaines listes répondent en un jour, d'autres en plusieurs mois. Ne pas relancer plus d'une fois.
 
+**Fait le 15 octobre 2026** (à ta demande, depuis ton compte) :
+
+- [open-source-mac-os-apps #1630](https://github.com/serhii-londar/open-source-mac-os-apps/pull/1630) : Atoll proposé dans *Browser* et *Productivity*.
+- [awesome-mac #3510](https://github.com/jaywcjlove/awesome-mac/pull/3510) : Atoll proposé dans *Browsers*, en anglais, chinois, japonais et coréen.
+- Pas proposé, d'après leurs règles : **awesome-macOS** (refuse toute application Electron), **awesome-windows** (refuse les outils tout récents faits avec l'aide de l'IA), **Awesome-Windows/Awesome** (n'existe plus). **awesome-electron** exige 30 jours d'existence et 100 étoiles : à proposer à partir du **14 novembre 2026** si Atoll a ses 100 étoiles.
+- GitHub t'enverra un e-mail quand un mainteneur répond. Ne relancer qu'une fois, au bout de trois semaines sans réponse.
+
 **Listes à viser** (vérifier sur place qu'elles sont toujours actives et acceptent ce genre de projet) :
 
 | Liste | Section probable | Remarque |
