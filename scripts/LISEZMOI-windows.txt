@@ -1,0 +1,39 @@
+Atoll {version} pour Windows
+==========================
+
+Atoll est le navigateur qui démarre comme un système : tes sites deviennent
+des applications, avec un bureau, un Dock, des dossiers et des espaces.
+Logiciel libre (licence MIT). Code source : https://github.com/amadoubaui/atoll
+
+
+Lancer Atoll
+------------
+
+1. Décompresse l'archive en entier (clic droit sur le fichier zip, puis
+   « Extraire tout… »).
+2. Place le dossier « Atoll » où tu veux, par exemple dans Documents.
+   Garde tous ses fichiers ensemble : Atoll.exe a besoin de ses voisins.
+3. Ouvre le dossier et double-clique sur Atoll.exe.
+
+Il n'y a pas d'installateur : rien n'est copié ailleurs sur l'ordinateur.
+Windows 10 ou 11, en 64 bits.
+
+
+« Windows a protégé votre ordinateur »
+--------------------------------------
+
+Au premier lancement, Windows SmartScreen peut afficher ce message bleu.
+Il apparaît pour tout programme qui n'est pas signé par un éditeur
+enregistré auprès de Microsoft (les certificats sont payants).
+Clique sur « Informations complémentaires », puis « Exécuter quand même ».
+Ne le fais que si l'archive vient bien de https://github.com/amadoubaui/atoll
+
+
+Où sont tes données
+-------------------
+
+Bureau, Dock, notes, réglages et connexions aux sites sont rangés dans
+%APPDATA%\Atoll (colle cette ligne dans la barre d'adresse de l'Explorateur).
+Mettre Atoll à jour : remplace le dossier « Atoll » par celui de la nouvelle
+archive, tes données restent en place.
+Désinstaller : supprime le dossier « Atoll », puis %APPDATA%\Atoll.

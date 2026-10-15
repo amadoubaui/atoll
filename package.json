@@ -1,0 +1,21 @@
+{
+  "name": "atoll",
+  "productName": "Atoll",
+  "version": "0.1.0",
+  "description": "Atoll — the browser that boots like an operating system. Web apps become windows, with a dock, a desktop, folders, spaces and keyboard shortcuts for everything.",
+  "main": "src/main/main.js",
+  "license": "MIT",
+  "author": "Amadou Ba (PIXEWORK)",
+  "repository": "github:amadoubaui/atoll",
+  "homepage": "https://atoll.pixework.pro",
+  "keywords": ["browser", "web-os", "desktop", "chromium", "electron", "webapps", "window-manager", "macos", "keyboard-first"],
+  "scripts": {
+    "start": "node scripts/dev.js",
+    "test": "node scripts/test-ui.js",
+    "build": "node scripts/build-mac.js",
+    "build:win": "node scripts/build-win.js"
+  },
+  "atoll": {
+    "electron": "44.7.0"
+  }
+}
