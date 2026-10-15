@@ -63,7 +63,7 @@ export function animate(node, frames, opts) {
 export function normalizeUrl(input) {
   const text = String(input || '').trim();
   if (!text) return null;
-  if (/^(https?:|about:|data:)/i.test(text)) return text;
+  if (/^https?:/i.test(text)) return text;
   if (/^localhost(:\d+)?(\/|$)/i.test(text) || /^\d{1,3}(\.\d{1,3}){3}(:\d+)?(\/|$)/.test(text)) return 'http://' + text;
   if (!/\s/.test(text) && /^[^/]+\.[a-z]{2,}(:\d+)?(\/.*)?$/i.test(text)) return 'https://' + text;
   return null;

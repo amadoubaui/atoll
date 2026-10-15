@@ -10,6 +10,9 @@ const fs = require('fs');
 
 const FUSE_SENTINEL = Buffer.from('dL7pKGdnNz796PbbjQWNKmHXBZaB9tsX');
 const FUSES_OFF = { 0: 'RunAsNode', 2: 'EnableNodeOptionsEnvironmentVariable', 3: 'EnableNodeCliInspectArguments' };
+// Et celui qu'on allume : les cookies (connexions aux sites) chiffrés par le
+// trousseau du système, comme dans Chrome, au lieu d'être écrits en clair.
+const FUSES_ON = { 1: 'EnableCookieEncryption' };
 
 function fuseWires(buf) {
   const found = [];
@@ -26,7 +29,10 @@ function fuseWires(buf) {
 // Coupe les fusibles dans un tampon (modifié sur place) ; rend le nombre de tables.
 function cutFusesIn(buf) {
   const wires = fuseWires(buf);
-  for (const w of wires) for (const i of Object.keys(FUSES_OFF)) if (Number(i) < w.length && buf[w.start + Number(i)] === 0x31) buf[w.start + Number(i)] = 0x30;
+  for (const w of wires) {
+    for (const i of Object.keys(FUSES_OFF)) if (Number(i) < w.length && buf[w.start + Number(i)] === 0x31) buf[w.start + Number(i)] = 0x30;
+    for (const i of Object.keys(FUSES_ON)) if (Number(i) < w.length && buf[w.start + Number(i)] === 0x30) buf[w.start + Number(i)] = 0x31;
+  }
   return wires.length;
 }
 
@@ -43,13 +49,14 @@ function fuseStates(buf, label = 'ce binaire') {
   return wires.map((w) => {
     const states = buf.subarray(w.start, w.start + w.length).toString('latin1');
     for (const [i, name] of Object.entries(FUSES_OFF)) if (states[i] === '1') throw new Error(`Fusible ${name} encore actif`);
+    for (const [i, name] of Object.entries(FUSES_ON)) if (states[i] !== '1') throw new Error(`Fusible ${name} pas allumé`);
     return states;
   });
 }
 
 // Relit le fichier et affiche l'état.
 function checkFuses(file) {
-  for (const states of fuseStates(fs.readFileSync(file), file)) console.log('Fusibles : ' + states + ' (coupés : ' + Object.values(FUSES_OFF).join(', ') + ')');
+  for (const states of fuseStates(fs.readFileSync(file), file)) console.log('Fusibles : ' + states + ' (coupés : ' + Object.values(FUSES_OFF).join(', ') + ' ; allumé : ' + Object.values(FUSES_ON).join(', ') + ')');
 }
 
-module.exports = { FUSE_SENTINEL, FUSES_OFF, fuseWires, cutFusesIn, cutFuses, fuseStates, checkFuses };
+module.exports = { FUSE_SENTINEL, FUSES_OFF, FUSES_ON, fuseWires, cutFusesIn, cutFuses, fuseStates, checkFuses };

@@ -59,6 +59,15 @@ function scheduleSave(json) {
   saveTimer = setTimeout(writeStateNow, 300);
 }
 
+// --- Permissions retenues par site ----------------------------------------------
+const grantsPath = () => path.join(app.getPath('userData'), 'atoll-permissions.json');
+function loadGrants() {
+  try { return JSON.parse(fs.readFileSync(grantsPath(), 'utf8')) || {}; } catch { return {}; }
+}
+function saveGrants(grants) {
+  try { fs.writeFileSync(grantsPath(), JSON.stringify(grants, null, 1)); } catch {}
+}
+
 // --- Identité du navigateur ----------------------------------------------------------
 // Sans « Electron/… » ni « Atoll/… » dans l'identité, les sites (Google en tête)
 // traitent Atoll comme le Chrome qu'il est.
@@ -75,20 +84,66 @@ function setupSession() {
   ses.setUserAgent(cleanUserAgent(ses.getUserAgent()));
   app.userAgentFallback = cleanUserAgent(app.userAgentFallback);
 
-  const allowed = new Set(['media', 'notifications', 'fullscreen', 'clipboard-sanitized-write', 'clipboard-read', 'pointerLock', 'geolocation', 'idle-detection', 'window-management', 'display-capture']);
-  ses.setPermissionRequestHandler((wc, permission, callback) => {
+  // Permissions des sites. Sans danger : accordées d'office. Sensibles (caméra,
+  // micro, position, lecture du presse-papiers, notifications) : Atoll demande,
+  // une fois par site, et retient la réponse. Le reste est refusé.
+  const silent = new Set(['fullscreen', 'clipboard-sanitized-write', 'pointerLock']);
+  const ask = { media: 'utiliser la caméra ou le micro', geolocation: 'connaître ta position', notifications: 't’envoyer des notifications', 'clipboard-read': 'lire le presse-papiers' };
+  const grants = loadGrants();
+  const pending = new Map();
+  ses.setPermissionRequestHandler(async (wc, permission, callback, details = {}) => {
     if (permission === 'notifications' && doNotDisturb) return callback(false);
-    callback(allowed.has(permission));
+    if (silent.has(permission)) return callback(true);
+    if (!ask[permission]) return callback(false);
+    let origin;
+    try { origin = new URL(details.requestingUrl || wc.getURL()).origin; } catch { return callback(false); }
+    if (!/^https?:/.test(origin)) return callback(false);
+    const what = permission === 'media' && details.mediaTypes?.length
+      ? (details.mediaTypes.includes('video') && details.mediaTypes.includes('audio') ? 'utiliser la caméra et le micro' : details.mediaTypes.includes('video') ? 'utiliser la caméra' : 'utiliser le micro')
+      : ask[permission];
+    const key = `${origin}|${permission}|${what}`;
+    if (key in grants) return callback(grants[key]);
+    // Une seule question à la fois pour la même demande.
+    if (!pending.has(key)) {
+      pending.set(key, dialog.showMessageBox(shellWin, {
+        type: 'question',
+        message: `${new URL(origin).host} voudrait ${what}.`,
+        detail: 'Ta réponse est retenue pour ce site. Tu peux tout oublier dans Réglages > Confidentialité.',
+        buttons: ['Refuser', 'Autoriser'],
+        defaultId: 0,
+        cancelId: 0,
+      }).then(({ response }) => {
+        grants[key] = response === 1;
+        saveGrants(grants);
+        return grants[key];
+      }).finally(() => pending.delete(key)));
+    }
+    callback(await pending.get(key));
   });
-  ses.setPermissionCheckHandler((wc, permission) => {
+  ses.setPermissionCheckHandler((wc, permission, origin) => {
     if (permission === 'notifications' && doNotDisturb) return false;
-    return allowed.has(permission);
+    if (silent.has(permission)) return true;
+    try { origin = new URL(origin).origin; } catch { return false; }
+    return Object.entries(grants).some(([k, v]) => v && k.startsWith(`${origin}|${permission}|`));
   });
+  ipcMain.handle('permissions:forget', () => { for (const k of Object.keys(grants)) delete grants[k]; saveGrants(grants); return true; });
 
   // Téléchargements : directement dans « Téléchargements », la coquille l'annonce.
   ses.on('will-download', (event, item) => {
     const dir = app.getPath('downloads');
     let name = item.getFilename();
+    // Un programme ou un script ne s'enregistre pas sans accord.
+    if (/\.(app|command|tool|terminal|pkg|mpkg|dmg|sh|scpt|workflow|exe|msi|bat|cmd|ps1|vbs|jar|scr)$/i.test(name)) {
+      const ok = dialog.showMessageBoxSync(shellWin, {
+        type: 'warning',
+        message: `Télécharger « ${name} » ?`,
+        detail: `Ce fichier est un programme ou un script, proposé par ${(() => { try { return new URL(item.getURL()).host; } catch { return 'un site'; } })()}. N’accepte que s’il vient d’un site de confiance.`,
+        buttons: ['Annuler', 'Télécharger'],
+        defaultId: 0,
+        cancelId: 0,
+      });
+      if (ok !== 1) { item.cancel(); return; }
+    }
     let target = path.join(dir, name);
     for (let i = 1; fs.existsSync(target); i++) {
       const ext = path.extname(name);
@@ -145,7 +200,7 @@ function createShell() {
     prefs.allowRunningInsecureContent = false;
     params.partition = PARTITION;
     const src = params.src || 'about:blank';
-    if (!/^(https?:|about:blank|data:text\/html)/i.test(src)) event.preventDefault();
+    if (!/^(https?:|about:blank$)/i.test(src)) event.preventDefault();
   });
   shellWin.webContents.on('did-attach-webview', (event, wc) => setupWebview(wc));
 
@@ -195,6 +250,11 @@ function setupWebview(wc) {
   });
 
   wc.on('did-create-window', (child) => {
+    child.webContents.setWindowOpenHandler(({ url }) => {
+      if (/^https?:/i.test(url)) send('open-url', { url });
+      return { action: 'deny' };
+    });
+    child.webContents.on('will-navigate', (event, url) => { if (!/^(https?:|about:blank$)/i.test(url)) event.preventDefault(); });
     child.webContents.on('before-input-event', (event, input) => {
       if (input.type === 'keyDown' && input.key === 'Escape' && input.meta) child.close();
     });
@@ -207,7 +267,8 @@ function setupWebview(wc) {
 function showContextMenu(wc, p) {
   const items = [];
   const nav = wc.navigationHistory;
-  if (p.linkURL) {
+  // Seuls les liens web s'ouvrent ailleurs : jamais smb:, file: ou une autre application.
+  if (p.linkURL && /^https?:/i.test(p.linkURL)) {
     items.push(
       { label: 'Ouvrir le lien dans une nouvelle fenêtre', click: () => send('open-url', { url: p.linkURL, from: wc.id }) },
       { label: 'Ouvrir le lien dans le navigateur du système', click: () => shell.openExternal(p.linkURL) },

@@ -136,6 +136,7 @@ async function boot() {
   });
 
   window.atoll?.onOpenUrl(({ url, from, background }) => {
+    if (!/^https?:/i.test(url)) return;
     const src = from != null ? wm.windowByWebContents(from) : null;
     wm.openUrl(url, { background, rect: src && src.mode === 'normal' ? { x: src.x + 28, y: src.y + 28, w: src.w, h: src.h } : undefined });
   });

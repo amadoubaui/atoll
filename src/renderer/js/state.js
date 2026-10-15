@@ -36,6 +36,9 @@ export function defaultState() {
   for (const [id, name, url, color] of WEB_APPS) apps[id] = { id, kind: 'web', name, url, color, icon: null };
   // Google Agenda déclare l'icône générale de Google : on lui donne la sienne.
   apps.calendar.iconUrl = 'https://ssl.gstatic.com/calendar/images/dynamiclogo_2020q4/calendar_31_2x.png';
+  // Gmail et Drive ne déclarent qu'une icône de 32 px : leur logo en grand.
+  apps.gmail.iconUrl = 'https://www.gstatic.com/images/branding/product/2x/gmail_2020q4_96dp.png';
+  apps.drive.iconUrl = 'https://www.gstatic.com/images/branding/product/2x/drive_2020q4_96dp.png';
 
   // Le bureau se remplit en colonnes depuis le coin haut-droit, comme sur macOS.
   const desktopItems = [

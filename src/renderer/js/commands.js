@@ -17,6 +17,7 @@ const LIST = [
   ['mission', 'system', 'menu.mission', ['Mod+Alt+Up', 'F3'], () => bus.emit('mission:toggle')],
   ['showDesktop', 'system', 'menu.showDesktop', ['Mod+Alt+B'], () => wm.toggleShowDesktop()],
   ['focusDock', 'system', 'Aller au Dock', ['Mod+Alt+K'], () => bus.emit('dock:focus')],
+  ['focusMenubar', 'system', 'Ouvrir la barre de menus', ['Mod+Alt+M', 'F10'], () => bus.emit('menubar:focus')],
   ['settings', 'system', 'app.settings', ['Mod+,'], () => wm.launch('settings')],
   ['help', 'system', 'menu.shortcuts', ['Mod+/'], () => bus.emit('help:toggle')],
   ['atollFullscreen', 'system', 'menu.fullscreen', [M('Mod+Ctrl+F', 'F11')], () => window.atoll.setFullscreen(!edges.nativeFullscreen)],

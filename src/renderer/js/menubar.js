@@ -102,6 +102,7 @@ export function initMenubar() {
   bus.on('space-changed', () => { renderSpaces(); updateVisibility(); });
   bus.on('spaces-changed', renderSpaces);
   bus.on('edges', updateVisibility);
+  bus.on('menubar:focus', () => { bar.classList.remove('hidden'); openMenuAt(0); const m = document.querySelector('#overlays .menu:last-child'); m?.querySelector('.menu-item:not(:disabled)')?.focus(); });
   bus.on('native-fullscreen', (on) => { document.body.classList.toggle('native-fullscreen', on); updateVisibility(); });
   document.body.classList.toggle('native-fullscreen', edges.nativeFullscreen);
   document.body.classList.toggle('mac', isMac);

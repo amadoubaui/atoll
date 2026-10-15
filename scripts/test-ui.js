@@ -253,6 +253,16 @@ const focused = (page) => page.evaluate(() => window.__atoll.wm.focused()?.appId
     await until(page, () => !document.querySelector('#help'));
   });
 
+  await step('barre de menus au clavier (⌘⌥M, flèches, Entrée)', async () => {
+    await press(app, `${MOD}+Alt+m`);
+    await page.waitForSelector('#overlays .menu');
+    await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(50);
+    assert.ok(await page.evaluate(() => document.querySelector('#menubar .mb-item.open')?.dataset.key === 'app'));
+    await page.keyboard.press('Escape');
+    await until(page, () => !document.querySelector('#overlays .menu:not(.closing)'));
+  });
+
   await step('Centre de contrôle : thème sombre', async () => {
     await page.click('#menubar .cc-btn');
     await page.waitForSelector('#control-center.open');

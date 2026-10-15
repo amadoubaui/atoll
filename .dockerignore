@@ -1,0 +1,7 @@
+.git
+src
+scripts
+docs
+assets
+tests
+*.md

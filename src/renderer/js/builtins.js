@@ -332,6 +332,10 @@ const PAGES = {
         const ok = await dialog({ title: 'Tout effacer ?', text: 'Cookies, connexions, stockage des sites et cache.', ok: 'Effacer', danger: true });
         if (ok) { await window.atoll.clearBrowsingData(); toast('Données effacées.', { icon: 'check' }); }
       } } }, 'Effacer…')),
+      row('Autorisations des sites', 'Caméra, micro, position, notifications : Atoll demande pour chaque site et retient ta réponse.', h('button.btn', { type: 'button', on: { click: async () => {
+        await window.atoll.forgetPermissions();
+        toast('Les sites te redemanderont leurs autorisations.', { icon: 'check' });
+      } } }, 'Tout oublier')),
       row('Ne pas déranger', 'Les sites ne peuvent plus envoyer de notifications.', toggle('doNotDisturb')),
     ),
     group('Ce qu’Atoll ne fait pas',

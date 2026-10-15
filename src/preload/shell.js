@@ -21,6 +21,7 @@ contextBridge.exposeInMainWorld('atoll', {
   setTheme: (mode) => ipcRenderer.invoke('theme:set', mode),
   openExternal: (url) => ipcRenderer.invoke('open-external', url),
   clearBrowsingData: () => ipcRenderer.invoke('clear-browsing-data'),
+  forgetPermissions: () => ipcRenderer.invoke('permissions:forget'),
   pickWallpaper: () => ipcRenderer.invoke('wallpaper:pick'),
   zoom: (wcId, delta) => ipcRenderer.invoke('webview:zoom', wcId, delta),
   onShortcut: listen('shortcut'),

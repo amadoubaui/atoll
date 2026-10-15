@@ -1,0 +1,11 @@
+# Site de présentation d'Atoll (https://atoll.pixework.pro), servi par nginx.
+# Sur le VPS PIXEWORK : /opt/atoll, port local 3110 (nginx de l'hôte devant).
+services:
+  site:
+    build:
+      context: .
+      dockerfile: deploy/site.Dockerfile
+    container_name: atoll-site
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3110:80"
