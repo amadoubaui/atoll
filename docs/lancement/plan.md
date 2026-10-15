@@ -10,6 +10,18 @@ Les textes à copier sont dans [`posts.md`](posts.md), la description et les suj
 
 ---
 
+## Déjà fait (15 octobre 2026)
+
+- Dépôt public https://github.com/amadoubaui/atoll : description, site, 20 sujets, Discussions activées, 5 tickets d'accueil (dont 3 « good first issue »).
+- Version **0.1.0** publiée avec `Atoll-mac-apple-silicon.zip`, `Atoll-mac-intel.zip` et `Atoll-windows-x64.zip`. Les liens directs `…/releases/latest/download/<nom>` du README et du site marchent.
+- Site en ligne : https://atoll.pixework.pro (HTTPS, vidéo, version française par `?lang=fr`, image d'aperçu `og.png`).
+- Fiches d'**Orbe** et de **KoraCut** mises à jour (description bilingue, 20 et 19 sujets ; pour KoraCut, `kdenlive` à la place de `mcp`, rien n'indiquant un serveur MCP).
+- Essais automatiques sur macOS et Windows à chaque envoi.
+
+**Ce qui reste à toi** (ça demande tes comptes personnels) : l'image d'aperçu du dépôt (étape 4, GitHub n'offre pas d'API pour ça), épingler le dépôt sur ton profil (étape 8), Google Search Console (étape 11), les comptes Hacker News, Product Hunt et Reddit (étapes 12 à 15), puis le calendrier ci-dessous.
+
+---
+
 ## Le principe en trois phrases
 
 1. On prépare tout **avant** d'en parler : dépôt public propre, version téléchargeable, site en ligne. Quelqu'un qui clique doit pouvoir installer Atoll en une minute.
@@ -31,7 +43,7 @@ Les textes à copier sont dans [`posts.md`](posts.md), la description et les suj
 4. **Image d'aperçu** : *Settings* → *General* → *Social preview* → *Edit* → téléverser `site/og.png`. C'est l'image qui s'affiche quand on partage le lien du dépôt sur X, LinkedIn, WhatsApp…
 5. **Publier une version (release)** : onglet *Releases* → *Draft a new release*.
    - *Tag* : `v0.1.0`. *Titre* : `Atoll 0.1.0`.
-   - Joindre `Atoll-mac.zip` et `Atoll-windows-x64.zip` (les noms doivent être exactement ceux du README et du site).
+   - Joindre `Atoll-mac-apple-silicon.zip`, `Atoll-mac-intel.zip` et `Atoll-windows-x64.zip` (les noms doivent être exactement ceux du README et du site).
    - Dans le texte : ce que fait Atoll en 5 lignes, plus la marche à suivre pour la première ouverture sur Mac (clic droit → Ouvrir) et sur Windows (SmartScreen).
    - Tester ensuite le lien `https://github.com/amadoubaui/atoll/releases/latest` dans une fenêtre privée : il doit tomber sur cette version.
 6. **Activer les Discussions** : *Settings* → *Features* → cocher *Discussions*. Les gens y posent des questions sans ouvrir de « bug ».
